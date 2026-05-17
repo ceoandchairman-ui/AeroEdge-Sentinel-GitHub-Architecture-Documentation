@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package aeroedge.sentinel.v1;
+
+option java_multiple_files = true;
+option java_package = "com.aeroedge.sentinel.v1";
+option java_outer_classname = "TelemetryProto";
+
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message IMU {
+  Vector3 accel = 1;
+}
+
+message Thermal {
+  float board_c = 1;
+  float battery_c = 2;
+}
+
+message BatteryBus {
+  float voltage_v = 1;
+  float current_a = 2;
+}
+
+message TelemetryPacket {
+  int64 timestamp = 1;
+  string component_state = 2;
+  IMU imu = 3;
+  Thermal thermal = 4;
+  BatteryBus battery_bus = 5;
+}
+
+message IngestAck {
+  bool accepted = 1;
+  int32 packets_received = 2;
+  string message = 3;
+}
+
+service TelemetryIngestService {
+  rpc StreamTelemetry(stream TelemetryPacket) returns (IngestAck);
+}

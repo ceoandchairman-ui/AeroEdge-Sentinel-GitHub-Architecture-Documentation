@@ -1,0 +1,40 @@
+mission:
+  name: aeroedge-sentinel
+  mode: hil
+  control_loop_hz: 25
+
+telemetry:
+  nominal_ranges:
+    imu_accel_g: [-2.0, 2.0]
+    board_temp_c: [20.0, 65.0]
+    battery_temp_c: [15.0, 55.0]
+    battery_bus_voltage_v: [24.0, 30.0]
+    battery_bus_current_a: [0.1, 4.0]
+  anomaly_injection:
+    enabled: true
+    period_packets: 37
+
+model:
+  engine: onnxruntime
+  artifact_path: models/lstm_autoencoder_int8.onnx
+  quantization: int8
+  warmup_samples: 40
+  sigma_multiplier: 3.0
+  confidence:
+    warning: 0.65
+    critical: 0.85
+
+safe_mode:
+  max_board_temp_c: 70.0
+  max_battery_temp_c: 58.0
+  min_bus_voltage_v: 22.5
+  max_bus_current_a: 5.0
+  required_actions:
+    - isolate_faulty_bus
+    - load_shed_payload
+    - reorient_solar_arrays
+
+mitigation:
+  retry_limit: 3
+  cooldown_s: 45
+  escalate_to_ground_if_unresolved: true

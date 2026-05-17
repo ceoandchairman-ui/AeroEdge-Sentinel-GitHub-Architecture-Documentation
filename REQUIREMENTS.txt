@@ -1,0 +1,8 @@
+grpcio>=1.72.0
+grpcio-tools>=1.72.0
+onnxruntime>=1.20.0
+pyyaml>=6.0.2
+pytest>=8.3.0
+pydantic>=2.9.0
+numpy>=2.1.0
+protobuf>=5.29.0
